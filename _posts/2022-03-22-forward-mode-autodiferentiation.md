@@ -1,7 +1,7 @@
 ---
 title: The magic behind (forward mode) Automatic Differentiation
 author: Alvaro
-date: 2022-03-10 11:33:00 +0800
+date: 2022-03-18 11:33:00 +0800
 categories: [ML, Deep Learning, Maths]
 tags: [maths, programming, python]
 math: true
@@ -62,12 +62,12 @@ So, two numbers at once... Doesn't that sound like imaginary numbers? ($a+ ib; a
 
 As with imaginary numbers, when mathematicians face problems, they tend to construct crazy (but ingenuous nonetheless) settings in which their problems can be easily solved. This is the case of a branch of mathematics called *Smooth Infinitesimal Analysis*, from where the concept of [**Dual Numbers**](https://en.wikipedia.org/wiki/Dual_number) arise.
 
-Dual numbers are an extension to the real numbers and they're similar to the imaginary ones in the sense that both have "2 dimensions" which are independent. 
+Dual numbers are an extension to the real numbers and they're similar to the imaginary ones in the sense that both have "2 dimensions" which are independent.
 
-A dual number takes the form of 
+A dual number takes the form of
 
 $$
-a + b \epsilon;\hspace{1em} a, b \in \mathbb{R} 
+a + b \epsilon;\hspace{1em} a, b \in \mathbb{R}
 $$
 
 with the property that $\epsilon$ is *nilponent*, which in layman's terms means $\epsilon^2 = 0$.
@@ -90,7 +90,7 @@ $$
 If we plug $x = a + b\epsilon$, see what happens:
 
 $$
-P(a+b\epsilon) = p_0 + p_1 (a+b\epsilon) + p_2 (a+b\epsilon)^2 + p_3 (a+b\epsilon)^3 + ... + p_n (a+b\epsilon)^n 
+P(a+b\epsilon) = p_0 + p_1 (a+b\epsilon) + p_2 (a+b\epsilon)^2 + p_3 (a+b\epsilon)^3 + ... + p_n (a+b\epsilon)^n
 $$
 
 Expanding and reordering the terms...
@@ -99,7 +99,7 @@ $$
 P(a+b\epsilon) = p_0 + p_1 a + p_2 a^2 + p_n a^n \fcolorbox{black}{red}{+} p_1 b\epsilon + 2p_2ab\epsilon + 3 p_3a^2b\epsilon + np_n a^{n-1}b\epsilon
 $$
 
-Note how the original $P(x)$ evaluation is on the left of the red $\fcolorbox{black}{red}{+}$ while on the right is $P'(x)b\epsilon$. 🤯 
+Note how the original $P(x)$ evaluation is on the left of the red $\fcolorbox{black}{red}{+}$ while on the right is $P'(x)b\epsilon$. 🤯
 
 Naturally, this effect extends to Taylor series
 
@@ -155,7 +155,7 @@ $$
 f(a + \epsilon) &=& 3(a + \epsilon)^2 + (a + \epsilon) + 1 \\
                 &=& 3(a^2 + \cancelto{0}{\epsilon^2} + 2a\epsilon) + a + \epsilon + 1 \\
                 &=& 3a^2 + a + 1 + 6a\epsilon + \epsilon\\
-                &=& \underbrace{(3a^2 + a + 1)}_{f(a) \text{part}} 
+                &=& \underbrace{(3a^2 + a + 1)}_{f(a) \text{part}}
                         \fcolorbox{black}{red}{+}
                     \underbrace{\epsilon(6a + 1)}_{f'(a) \text{part}}
 \end{align*}
@@ -189,7 +189,7 @@ DualNumber(2, 3)
 2 + 3ϵ
 ```
 
-Then, in order to do anything useful,this dual number class must support the arithmetic operations we defined above. 
+Then, in order to do anything useful,this dual number class must support the arithmetic operations we defined above.
 
 (_In order to keep things simple I will only implement addition. The class would look as follows_)
 
@@ -199,7 +199,7 @@ class DualNumber:
     def __init__(self, real_part, dual_part):
         self.real = real_part
         self.dual = dual_part
-        
+
     def __add__(self, other):
         if isinstance(other, DualNumber):
             return DualNumber(self.real + other.real, self.dual + other.dual)
@@ -207,11 +207,11 @@ class DualNumber:
             return DualNumber(self.real + other, self.dual)
         else:
             raise TypeError("Cannot add that to a dual number!")
-            
+
     def __radd__(self, other):
         # This is for when we do things like: 10 + DualNumber()
         return DualNumber(self.real + other, self.dual)
-            
+
     def __repr__(self):
         return f"{self.real} + {self.dual}ϵ"
 ```
