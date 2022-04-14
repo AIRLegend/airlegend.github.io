@@ -174,7 +174,7 @@ div {
 .code-header {
   @extend %no-cursor;
 
-  $code-header-height: 2.25rem;
+  $code-header-height: 1.2rem;
 
   border-top-left-radius: $code-radius;
   border-top-right-radius: $code-radius;
@@ -183,48 +183,48 @@ div {
   align-items: center;
   height: $code-header-height;
 
-  &::before {
-    $dot-size: 0.75rem;
-    $dot-margin: 0.5rem;
+  // &::before {
+  //   $dot-size: 0.75rem;
+  //   $dot-margin: 0.5rem;
 
-    content: "";
-    display: inline-block;
-    margin-left: 1rem;
-    width: $dot-size;
-    height: $dot-size;
-    border-radius: 50%;
-    background-color: var(--code-header-muted-color);
-    box-shadow:
-      ($dot-size + $dot-margin) 0 0 var(--code-header-muted-color),
-      ($dot-size + $dot-margin) * 2 0 0 var(--code-header-muted-color);
-  }
+  //   content: "";
+  //   display: inline-block;
+  //   margin-left: 1rem;
+  //   width: $dot-size;
+  //   height: $dot-size;
+  //   border-radius: 50%;
+  //   background-color: var(--code-header-muted-color);
+  //   box-shadow:
+  //     ($dot-size + $dot-margin) 0 0 var(--code-header-muted-color),
+  //     ($dot-size + $dot-margin) * 2 0 0 var(--code-header-muted-color);
+  // }
 
-  /* the label block */
-  span {
-    /* label icon */
-    i {
-      font-size: 1rem;
-      margin-right: 0.4rem;
-      color: var(--code-header-icon-color);
+  // /* the label block */
+  // span {
+  //   /* label icon */
+  //   i {
+  //     font-size: 1rem;
+  //     margin-right: 0.4rem;
+  //     color: var(--code-header-icon-color);
 
-      &.small {
-        font-size: 70%;
-      }
-    }
+  //     &.small {
+  //       font-size: 70%;
+  //     }
+  //   }
 
-    @at-root [file] #{&} > i {
-      position: relative;
-      top: 1px; /* center the file icon */
-    }
+  //   @at-root [file] #{&} > i {
+  //     position: relative;
+  //     top: 1px; /* center the file icon */
+  //   }
 
-    /* label text */
-    &::after {
-      content: attr(data-label-text);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--code-header-text-color);
-    }
-  }
+  //   /* label text */
+  //   &::after {
+  //     content: attr(data-label-text);
+  //     font-size: 0.85rem;
+  //     font-weight: 600;
+  //     color: var(--code-header-text-color);
+  //   }
+  // }
 
   /* clipboard */
   button {

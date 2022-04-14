@@ -16,7 +16,7 @@ lang: en
 prefer_datetime_locale:
 
 # Change to your timezone › http://www.timezoneconverter.com/cgi-bin/findzone/findzone
-timezone: Asia/Shanghai
+timezone: Europe/Madrid
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
@@ -26,10 +26,10 @@ title: Alvaro's blog                          # the main title
 tagline: Notes on projects and ideas   # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
-  A minimal, responsive, and powerful Jekyll theme for presenting professional writing.
+  Mostly at the intersection of computers, math and data.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: ''
+url: 'https://airlegend.github.io'
 
 github:
   username: AIRLegend             # change to your github username
@@ -80,10 +80,12 @@ theme_mode:   # [light|dark]
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn: 'https://raw.githubusercontent.com/cotes2020/chirpy-images/main'
+#img_cdn: 'https://raw.githubusercontent.com/cotes2020/chirpy-images/main'
+#img_cdn: '.'
+#img_cdn: 'https://raw.githubusercontent.com/AIRLegend/blog-images/main'
 
 # the avatar on sidebar, support local or CORS resources
-avatar: '/commons/avatar.jpg'
+avatar: 'https://avatars.githubusercontent.com/u/9653892?v=4'
 
 # boolean type, the global switch for ToC in posts.
 toc: true

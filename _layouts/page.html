@@ -40,7 +40,9 @@ layout: default
 
     <div class="access">
       {% include update-list.html %}
+      {% comment %}
       {% include trending-tags.html %}
+      {% endcomment %}
     </div>
 
     {% for _include in layout.pannel_includes %}
