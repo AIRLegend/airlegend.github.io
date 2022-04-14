@@ -48,7 +48,7 @@ social:
     - https://github.com/AIRLegend       # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
-    # - https://www.linkedin.com/in/username
+    - https://www.linkedin.com/in/alvaro-ibrain-rodriguez
 
 google_site_verification:               # fill in to your verification string
 
@@ -190,10 +190,10 @@ exclude:
   - package*.json
 
 jekyll-archives:
-  enabled: [categories, tags]
+  enabled: [categories]
   layouts:
     category: category
-    tag: tag
+    #tag: tag
   permalinks:
-    tag: /tags/:name/
+    #tag: /tags/:name/
     category: /categories/:name/

@@ -27,7 +27,7 @@ $$
 
 Which is the same as saying: "what's the slope of the line which crosses $f(x)$ and $f(x + \epsilon)$?":
 
-![derivativeSlope](https://dl3.boxcloud.com/api/2.0/internal_files/939729003215/versions/1013995109615/representations/png_paged_2048x2048/content/1.png?access_token=1!LZCRLQXcZ9DOJUnyMrnd1Q2-nX5KZEButnqg0SdpUAA7akttgSVqOgf5qc0rm0_HQczzDc4nwKfuYK8ttUgnojwAhd85UTSL1nWbSEfgSYnB3FpZFeYqnXysae2BVNujIhV1hMRD07walE12FiguiPoreRvgvBZ6fvOfjuqnCCLIOvLtOTL54PJB2AY54Y0F4KVFgDiPkND-9WWWokDkVHQuR0K-1qdakrzDce018pAxC6rM2z696NobkanPHWlB2669xOi-5g_3sDCS6qJJwfMJvTnDAxpbrxApoAJYRwkUFCgM2CW5cxlP7tMfeQkZOj5dHYM0PaS73n8C6zWh--Xoa4pZ5I0JPy3zQztI658wZhKbyQGx3ZCeKbHn1nkAWLyOOyObmpECL-m7rYMk3kP-_E1H99eG8nJhDzUUKJZWUzcHdD692n3MzU02IwWpz1PS255b6pEmLpiKUWN5Jb3TgwuNghs1aFBeywZCe7JPEGhmpsqF2VHmnurU2Flhd3t3jEzJFQLruWQ8XuiChoj_a3gPyRl8wx0I2bT5lukuPSxF2shcJPfuSs9FmIquiAATjcTTCirqrO7ePhHmC74X78i9dT82UzXpULQB2R-SXU_xWOFHDzaw2FAGDTAAtV28hZwdlTpJanU_lYWc1ZCe4FyGAWdewHeIBFABiO-wRN1h)
+![derivativeSlope](https://i.imgur.com/H9fAq1e.png)
 
 
 This $\epsilon$ is really a perturbation, a small amount of "noise" that is added to $x$ in order to calculate the slope.
@@ -44,7 +44,7 @@ Why is that? Why we cannot simply reduce $\epsilon$ as far as we want?
 
 Computers use the [IEEE 754 standard](https://en.wikipedia.org/wiki/IEEE_754) for representing floating point numbers (i.e. numbers in $\mathbb{R}$). For example, with 32 bits, a number is represented in the following way:
 
-![FPRepr](https://dl3.boxcloud.com/api/2.0/internal_files/939705691642/versions/1013970156442/representations/png_paged_2048x2048/content/1.png?access_token=1!RPZ-0QPXhvPAPnnqaAaCRZAqMMuq6sowf5yrN7FlQ0LMMV61BqCh3YEpG49KhNZRZn5VmFN0tVZ8eLTlkPauCy3-hQwerheIx4hkIGMk4pwKCyq7kGvu4wj2qmc-tNbo4D6eNvZA6niKbiMYfLutMFi5dYedLkJ7oxO2AW6m-7O81Y7LNAq1LFcuqqYIVpxUNj_Gl6BiKu1xK6vErDsdlgIlB00CWGuUBOzrBM_b7nFQ2hnW4T1_qj8bq2P467JaNQfCmdapVRp_yEDYF6E4prn5RvqU2GllEbHH_JpMo7SnWmjBxPbfX86B__ivTicUlTl3lJu8b_9URhSovEc-mIyDhaqfAkwAYdHWqSv7N0rFibhwsmMUOn5_6YemndAmWMeblTPnTC5XRP9-w7PTW1eoYbfvRcXjTsJ3EW2pTIRXeC2Ws6X9ooeWxCyeiBrSaCVuOVvImnMhNsOcLkJ1_wZ5C9Y5kFOH1VxxG0uX3W0xRL_U63dU8xYOmDcnjAfPm_up5-dtFvnq_NWiBvAdVKkD1BNPf-UjNCJJk-Ke-tXrBl9a34G68kFFAMXHyjy9pQOo5e80y2UOfi8sGGJ60nUBhFcqnZjgcdS_Yj7Mi2lEBw9nxp-nvpGpEpOcKEYW2sMcIa78Gi3Z24VtN75O7qkmCstRLMmXxXLbRgNZE9xU5aP7)
+![Floating point representation](https://i.imgur.com/q8fVi0q.png)
 
 This limits out "resolution" to about $10^{-126}$, which is the smallest absolute number (apart from $0$) we can represent.
 
@@ -247,6 +247,6 @@ ax.plot(xticks, func_evals, label="sin(x)")
 ax.plot(xticks, deriv_evals, label="sin'(x)")
 ax.legend()
 ```
-![derivative](https://dl3.boxcloud.com/api/2.0/internal_files/939737345605/versions/1014003999205/representations/png_paged_2048x2048/content/1.png?access_token=1!b537fXGlpkPn-kKZjTrrG5is-OY6emDx4yXXloIiI5ZJBw-l3ZwFqK-l4TaiXLGV6YiE7FqbrAUgkbY2Cj-rteWcooiTGv_pjcfI3w9HUP7vW0kHYqXppQ6OCnKRR0LdtnUUZvI819budUJ6dUNU8NHBQXrwF57GsDD0heBj0tSVdHA1uPqSLzgfuZh45EWLdNW_wT-XxAYI17_N03BzQs6qHeLoSR-Y3XQ497Akpd-bFvaH1NAyYaBcPHndubRSg-ufjN8fmZgdke3kaGjDP3lkAkZsDnfTtwmn7uO3r4cOV8_Ki_R4sPSQ51CCDT3OsCxP-n-J2j2O36ytRiAUGCYv5VD67AXabEHWNZz56KxS8GCF7S3ygeKu-p3RvBE7KA5vpanK_diDPyPSZUniYaY6F2DoSRjOTI8-AY9HbIlNgvnegHWo0AsfHN-R0T4NRBbJDzrEdgOjRYbhEUpudcrAE-RcI3ZTxOuCsQ9j126JxQaTFOZ4__-mjFN8xwSNrtHY6qhJ1JSxhrZsgG6EOlDdbhLYd16Vi3gtknyaF34JC6de8_GO7BxOjQxvHZUga825JbPrdvuQcbN8hzgKJTYwQEWkcPVeCVV2cPjBGb9XIfnmnPRFbIF7EExZ4hK4CmnZ8X3kS5y_c8Wn-dUvVoCSdjEaLJ6PPphqYw13heNG-uoE)
+![derivative](https://i.imgur.com/Up7yySN.png)
 
 Although it's still necessary to add support for the other operations (`sub`, `mult`, `div`, ...), it's pretty impressive for this few lines, right?
