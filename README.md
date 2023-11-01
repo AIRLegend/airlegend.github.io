@@ -6,3 +6,8 @@
 
 ## Credits 
 me
+
+
+## Launch
+
+`bundle exec jekyll serve`
