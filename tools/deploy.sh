@@ -116,7 +116,12 @@ deploy() {
   fi
 }
 
+fiximg() {
+  find _posts -name "*.md" -exec sed -i 's#\(assets/.*\.png\)#https://media.githubusercontent.com/media/airlegend/airlegend.github.io/gh-pages/\1?raw=true#g' {} +
+}
+
 main() {
+  fiximg
   init
   build
   # test
