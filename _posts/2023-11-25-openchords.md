@@ -90,14 +90,12 @@ The main issue here is that my frontend development skills are mediocre, so I so
 
 We're entering in the part that sparked the idea of doing this. The other day I was messing around on Twitter and found some guy sharing this tool called [`screenshot-to-code`](https://github.com/abi/screenshot-to-code). Here is a quick video of what it can do:
 
-<!--
+
 <center>
 <video width="640" height="480" controls>
   <source src="https://private-user-images.githubusercontent.com/23818/283664580-503eb86a-356e-4dfc-926a-dabdb1ac7ba1.mp4" type="video/mp4">
 </video>
 </center>
--->
-**VIDEO**
 
 
 It basically uses an screenshot of a webpage and the GPT4-Vision API to automatically build the HTML, CSS and JS code for the site. I got quite mindblown on how simple and how well it worked on the examples. So I had to try it for this chords site.
