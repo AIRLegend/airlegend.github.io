@@ -90,11 +90,8 @@ The main issue here is that my frontend development skills are mediocre, so I so
 
 We're entering in the part that sparked the idea of doing this. The other day I was messing around on Twitter and found some guy sharing this tool called [`screenshot-to-code`](https://github.com/abi/screenshot-to-code). Here is a quick video of what it can do:
 
-
 <center>
-<video width="640" height="480" controls>
-  <source src="https://private-user-images.githubusercontent.com/23818/283664580-503eb86a-356e-4dfc-926a-dabdb1ac7ba1.mp4" type="video/mp4">
-</video>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">screenshot-to-code: <br><br>upload a screenshot of any website, watch as AI progressively builds the html, iteratively improving the generated code by comparing it against the screenshot repeatedly. <a href="https://t.co/TCrbJj3VS0">pic.twitter.com/TCrbJj3VS0</a></p>&mdash; Siqi Chen (@blader) <a href="https://twitter.com/blader/status/1727105236811366669?ref_src=twsrc%5Etfw">November 21, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </center>
 
 
