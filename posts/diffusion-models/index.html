@@ -1,0 +1,369 @@
+<!DOCTYPE html><html lang="en" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="Intro to Diffusion Models" /><meta name="author" content="Alvaro" /><meta property="og:locale" content="en" /><meta name="description" content="On Diffusion Models" /><meta property="og:description" content="On Diffusion Models" /><link rel="canonical" href="https://airlegend.github.io/posts/diffusion-models/" /><meta property="og:url" content="https://airlegend.github.io/posts/diffusion-models/" /><meta property="og:site_name" content="Alvaro’s blog" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2022-07-01T05:33:00+02:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Intro to Diffusion Models" /><meta name="twitter:site" content="@aalvaroir" /><meta name="twitter:creator" content="@Alvaro" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Alvaro"},"dateModified":"2022-07-01T05:33:00+02:00","datePublished":"2022-07-01T05:33:00+02:00","description":"On Diffusion Models","headline":"Intro to Diffusion Models","mainEntityOfPage":{"@type":"WebPage","@id":"https://airlegend.github.io/posts/diffusion-models/"},"url":"https://airlegend.github.io/posts/diffusion-models/"}</script><title>Intro to Diffusion Models | Alvaro's blog</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Alvaro's blog"><meta name="application-name" content="Alvaro's blog"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src=" https://avatars.githubusercontent.com/u/9653892?v=4 " alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">Alvaro's blog</a></div><div class="site-subtitle font-italic">Notes on projects and ideas</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/AIRLegend" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/aalvaroir" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['alvaroibrain','outlook.es'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>Intro to Diffusion Models</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>Intro to Diffusion Models</h1><div class="post-meta text-muted"><div> By <em> Alvaro </em></div><div class="d-flex"><div> <span> Posted <em class="timeago" data-ts="1656646380" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" > 2022-07-01 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="2401 words"> <em>13 min</em> read</span></div></div></div><div class="post-content"><h1 id="on-diffusion-models">On Diffusion Models</h1><hr /><p>In this post I’m going to cover an introduction to Diffusion Models (as I don’t consider myself an expert on them) by summarizing <a href="https://arxiv.org/pdf/2006.11239.pdf">Ho et al (2020). “Denoising Diffusion Probabilistic Models”</a>. Nonetheless, I hope these notes can ease the learning or refreshment process to some of you. So… let’s get to it!</p><h2 id="diffusion-what"><span class="mr-2">Diffusion… what?</span><a href="#diffusion-what" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>If you haven’t been in a cave this last year and a half you’ve probably seen a great amount of “AI generated” photos on sites like Twitter or Reddit.</p><p><img data-src="https://i.imgur.com/UShsddF.png" alt="Example images. Credits to @Dalle2Pics" data-proofer-ignore> <em>Some (DALL-E 2) generated images. Taken from <a href="https://twitter.com/Dalle2Pics">@Dalle2Pics</a>.</em></p><p>If that’s the case, you’re probably familiar with names like “<a href="https://arxiv.org/pdf/2112.10741.pdf">GLIDE</a>”, “<a href="https://openai.com/dall-e-2/">DALL-E 2</a>” (by OpenAI) or, more recently, “<a href="https://imagen.research.google/">Imagen</a>” (by Google). Well… these algorithms share a common heart: <strong>Diffusion models</strong>.</p><h2 id="what-is-a-diffusion-model"><span class="mr-2">What is a diffusion model?</span><a href="#what-is-a-diffusion-model" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>You’ve probably already heard about GANs or VAEs. I’m not covering them here, but these are examples of famous generative models –models that generates things, like images in this case– which have been shown to obtain very realistic results.</p><p>A diffusion model is (yet) another type of generative model. Its main difference to the former examples is that they’re fall under the category of “autoregressive”.</p><p>The main idea of this type of models is having a system that takes random noise and iteratively removes a little bit amount of it at a time until a clear image is left.</p><p><img data-src="https://i.imgur.com/FaU7YDq.png" alt="Diffusion overview" data-proofer-ignore> <em>Diffusion overview (<a href="https://developer.nvidia.com/blog/improving-diffusion-models-as-an-alternative-to-gans-part-2/">source</a>).</em></p><p>The above image shows the complete idea. Basically, we begin with a process that takes a real image, gradually adds noise and then we train a reverse process which learns how to backwards walk the sequence, iteratively removing the noise.</p><p>After having the reverse process trained, we could feed in random noise and let it generate noiseless images.</p><p>With this intuition in the head we can dive a little bit more into the technical details.</p><h3 id="1-adding-noise-to-an-image"><span class="mr-2">1. Adding noise to an image</span><a href="#1-adding-noise-to-an-image" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>Diffusion models (both the forward and reverse steps) are parametrized as <a href="https://en.wikipedia.org/wiki/Markov_chain">Markov Chains</a> in which each step in the sequence, $x_t$ (image) depends only on the directly previous image $x_{t-1}$ (or the next one, $x_{t+1}$, in case we’re denoising). Let’s focus first on the noising process.</p><p><img data-src="https://i.imgur.com/PjChw9r.png" alt="Diffusion overview" data-proofer-ignore> <em>Diffusion overview as a Markov Chain. Image taken from original paper (with a few additions by me).</em></p><p>In the above image you can see some $q(…)$’s. This $q$ is a probability distribution which models the the noising process. On each step $t$ we condition it on the last image we have in our sequence, $x_{t-1}$ and sample from it. This new sample will be the our last image $x_{t-1}$ plus some random noise, which is typically modelled as gaussian.</p><p>If we assume the added noise is gaussian, we can model the conditioned distributions as:</p>\[\begin{equation} q(x_t | x_{t-1}) := \mathcal{N}(x_t; \sqrt{1-\beta_t}x_{t-1}, \beta_t I) \label{eq:q_open} \end{equation}\]<p>As you can see, each new image will be sampled from a gaussian with mean $\sqrt{1-\beta_t}x_{t-1}$ and variance $\beta_t$.</p><p>But, what is this $\beta_t$?. Well, it is a coefficient that increases with time and is always in $[0, 1]$. This is done so when $t \rightarrow \infty$ the distribution becomes $\mathcal{N}(0, I)$, a true noise distribution without any remains of the original image.</p><p>However, the problem with the formulation of $\eqref{eq:q_open}$ is that it’s open, meaning that we have, for each step $x_t$, to compute all the previous steps in the chain ($q(x_1|x0), q(x_2|x1), …, q(x_{t}|x_{t-1})$), making things quite slow.</p><p>Luckily, with a bit of math magic (I’ll refer you to the original paper for details), we can reformulate it by introducing two new coefficients: $\alpha_t = 1 - \beta_t $ and ${\bar\alpha_t = \prod_{i=1}^{t} \alpha_i}$. So the new expression is:</p>\[\begin{equation} q(x_t | x_0) := \mathcal{N}(x_t; \sqrt{\bar\alpha_t}x_0, (1-\bar\alpha_t) I) \label{eq:q_closed} \end{equation}\]<p>The cool thing about this new closed form formula is that it allows us to obtain any arbitrary step in the chain directly from the initial image $x_0$ (yay! we save steps! 🎉).</p><h3 id="2-removing-noise-from-an-image"><span class="mr-2">2. Removing noise from an image</span><a href="#2-removing-noise-from-an-image" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>As we saw above, denoising is also thought as a markov process.</p><p><img data-src="https://i.imgur.com/wqTPgP5.png" alt="Diffusion overview" data-proofer-ignore> <em>Denoising overview as a Markov Chain. Image taken from original paper (with a few additions by me).</em></p><p>This time, each image $x_t$ comes from sampling a distribution $p_\theta$ conditioned on the previous (noisier) image.</p><p>Probably you’ve noted the $\theta$ subscript. That’s hinting this process is related to some sort of model in which $\theta$ refers to its parameters; opposed to $q$, which is nonparametric.</p><p>Formally, this reverse process is represented as:</p>\[\begin{equation} p_{\theta}(x_{t-1} | x_t) := \mathcal{N}(x_{t-1}; \mu_{\theta}(x_t, t), \Sigma_\theta(x_t, t) I) \label{eq:p1} \end{equation}\]<p>Meaning that each “clearer” image comes from sampling a gaussian with mean $\mu_{\theta}(x_t, t)$ and variance $\Sigma_\theta(x_t, t)$. Again, the $\theta$’s point that those come from two trained models.</p><p>However, original authors state that, after testing, they found that substituting the $\Sigma_{\theta}$ model with the original $\beta_t$ coefficients from the “noising part” yielded better images and improved training stability. So $\eqref{eq:p1}$ becomes a simpler expression:</p>\[\begin{equation} p_{\theta}(x_{t-1} | x_t) := \mathcal{N}(x_{t-1}; \mu_{\theta}(x_t, t), \beta_t I) \label{eq:p2} \end{equation}\]<p>So, this way we’d only had to train a model that predicts the means of these gaussians at each step $t$!</p><p>I’m not entering into the details, but if you follow equations (8), (9) and (10) of the original paper, you’ll find that $\mu_\theta$ of $\eqref{eq:p2}$ is predicting the following:</p>\[\begin{equation} \mu_{\theta}(x_t, t) := \frac{1}{\alpha_t} (x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}} \epsilon) \hspace{1em} ;\epsilon ~ \mathcal{N}(0, I) \label{eq:mu0} \end{equation}\]<p>Using this new reparametrization, the only new “free” parameter is $\epsilon$. We can leverage this fact for training a model that predicts $\epsilon$ given an image $x_t$. That is simply to predict the noise that was added to $x_{t-1}$ for getting to $x_t$!</p>\[\begin{equation} \mu_{\theta}(x_t, t) := \frac{1}{\alpha_t} (x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}} \epsilon_\theta(x_t, t)) \label{eq:mufinal} \end{equation}\]<p>Recall inference is done by sampling from $p_\theta$, which we can simply do it with:</p>\[\begin{equation} x_{t-1} \sim p_\theta(x_{t-1} | x_t) = \frac{1}{\alpha_t} (x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}} \epsilon_\theta(x_t, t)) + \sqrt{\beta_t} z \hspace{1em} ;z \sim \mathcal{N}(0, I) \label{eq:p_inference} \end{equation}\]<h3 id="3-training-a-model-for-denoising"><span class="mr-2">3. Training a model for denoising</span><a href="#3-training-a-model-for-denoising" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><p>Having reframed the inference, as shown in $\eqref{eq:p_inference}$, we only need to have a single model for predicting noise ($\epsilon_\theta$). This way, we could train the model simply by using any type of regression loss, like MSE (mean squared error) on the added noise.</p><p>The training algorithm would work as follows:</p><ol><li>Choose a random $t \in (1, 2, …, T)$.<li>Sample noise $\epsilon \sim \mathcal N(0, I)$.<li>Generate $x_{t+1}$ sampling from $q(x_{t+1} | x_0)$ (as shown in $\eqref{eq:q_closed}$ using $\epsilon$); that is: $x_{t+1} = \sqrt{\bar\alpha_t}x_0 + (1-\bar\alpha_t) \epsilon$.<li>Calculate loss: $\mathcal L = MSE(\epsilon - \epsilon_\theta(x_{t+1}, t))$.<li>Take the gradients w.r.t. $\mathcal L$ and run regular gradient descent.</ol><p>After training, hopefully, $\epsilon_\theta$ will be able to run each denoising step as explained on the previous section.</p><h2 id="implementing-a-simple-diffusion-model"><span class="mr-2">Implementing a (simple) diffusion model</span><a href="#implementing-a-simple-diffusion-model" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p><img data-src="https://i.imgur.com/zwn1dMj.jpg" alt="" width="400" data-proofer-ignore></p><p>Let’s see how we can implement a very simple diffusion model using Tensorflow.</p><p><em>Note: Original authors had access to a TPU-v3 pod for several hours of training time on the CIFAR-10 and CELEB-A datasets. Since I only have access to my laptop and Google Colab, I’ll limit my example to training over one single image.</em></p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">layers</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+</pre></table></code></div></div><p>In the original paper researchers use a U-Net architecture based on PixelCNN++ (with more complex stuff like self attention blocks). However, for this example I’ll use a “vanilla U-Net” (shown on the next figure), which makes things simpler, faster to train and will still work reasonably well.</p><p><img data-src="https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/u-net-architecture.png" alt="" width="500" data-proofer-ignore> <em>UNet architecture diagram.</em></p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+</pre><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">double_conv_block</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_filters</span><span class="p">):</span>
+    <span class="c1"># Conv2D then ReLU activation
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="n">n_filters</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span> <span class="o">=</span> <span class="s">"same"</span><span class="p">,</span> <span class="n">activation</span> <span class="o">=</span> <span class="s">"swish"</span><span class="p">,</span> <span class="n">kernel_initializer</span> <span class="o">=</span> <span class="s">"he_normal"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># relu act
+</span>    <span class="c1"># Conv2D then ReLU activation
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="n">n_filters</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span> <span class="o">=</span> <span class="s">"same"</span><span class="p">,</span> <span class="n">activation</span> <span class="o">=</span> <span class="s">"swish"</span><span class="p">,</span> <span class="n">kernel_initializer</span> <span class="o">=</span> <span class="s">"he_normal"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># relu act
+</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="k">def</span> <span class="nf">downsample_block</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_filters</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">double_conv_block</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_filters</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">MaxPool2D</span><span class="p">(</span><span class="mi">2</span><span class="p">)(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">p</span>
+
+<span class="k">def</span> <span class="nf">upsample_block</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">conv_features</span><span class="p">,</span> <span class="n">n_filters</span><span class="p">):</span>
+    <span class="c1"># upsample
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Conv2DTranspose</span><span class="p">(</span><span class="n">n_filters</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">activation</span> <span class="o">=</span> <span class="s">"relu"</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="c1"># concatenate 
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">conv_features</span><span class="p">])</span>
+    <span class="c1"># dropout
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+    <span class="c1"># Conv2D twice with ReLU activation
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">double_conv_block</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n_filters</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="k">def</span> <span class="nf">build_unet_model</span><span class="p">(</span><span class="n">img_shape</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="s">""" Builds a U-Net accepting 64x64 grayscale images by default
+    """</span>
+
+    <span class="n">img_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">img_shape</span> <span class="k">else</span> <span class="n">img_shape</span>
+    <span class="c1"># inputs
+</span>    <span class="n">inputs</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">img_shape</span><span class="p">)</span>
+
+    <span class="c1"># encoder: contracting path - downsample
+</span>    <span class="c1"># 1 - downsample
+</span>    <span class="n">f1</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">downsample_block</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+    <span class="c1"># 2 - downsample
+</span>    <span class="n">f2</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">downsample_block</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+    <span class="c1"># 3 - downsample
+</span>    <span class="n">f3</span><span class="p">,</span> <span class="n">p3</span> <span class="o">=</span> <span class="n">downsample_block</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+    <span class="c1"># 4 - downsample
+</span>    <span class="n">f4</span><span class="p">,</span> <span class="n">p4</span> <span class="o">=</span> <span class="n">downsample_block</span><span class="p">(</span><span class="n">p3</span><span class="p">,</span> <span class="mi">512</span><span class="p">)</span>
+
+    <span class="c1"># 5 - bottleneck
+</span>    <span class="n">bottleneck</span> <span class="o">=</span> <span class="n">double_conv_block</span><span class="p">(</span><span class="n">p4</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
+
+    <span class="c1"># decoder: expanding path - upsample
+</span>    <span class="c1"># 6 - upsample
+</span>    <span class="n">u6</span> <span class="o">=</span> <span class="n">upsample_block</span><span class="p">(</span><span class="n">bottleneck</span><span class="p">,</span> <span class="n">f4</span><span class="p">,</span> <span class="mi">512</span><span class="p">)</span>
+    <span class="c1"># 7 - upsample
+</span>    <span class="n">u7</span> <span class="o">=</span> <span class="n">upsample_block</span><span class="p">(</span><span class="n">u6</span><span class="p">,</span> <span class="n">f3</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+    <span class="c1"># 8 - upsample
+</span>    <span class="n">u8</span> <span class="o">=</span> <span class="n">upsample_block</span><span class="p">(</span><span class="n">u7</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+    <span class="c1"># 9 - upsample
+</span>    <span class="n">u9</span> <span class="o">=</span> <span class="n">upsample_block</span><span class="p">(</span><span class="n">u8</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+
+    <span class="c1"># outputs
+</span>    <span class="n">outputs</span> <span class="o">=</span> <span class="n">layers</span><span class="p">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">,</span> <span class="n">activation</span> <span class="o">=</span> <span class="s">"linear"</span><span class="p">)(</span><span class="n">u9</span><span class="p">)</span>
+
+    <span class="c1"># unet model with Keras Functional API
+</span>    <span class="n">unet_model</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"U-Net"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">unet_model</span>
+</pre></table></code></div></div><p>Our single image will be the famous “Lena” photo in one single channel (i.e. black and white). Let’s download it from Wikipedia :</p><p><img data-src="https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png" alt="" width="250" data-proofer-ignore> <em>Lena photo.</em></p><div class="language-plaintext highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>!wget https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png -O lena.png
+</pre></table></code></div></div><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="c1"># Load the image
+</span><span class="n">lena_img</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'lena.png'</span><span class="p">).</span><span class="n">resize</span><span class="p">((</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">)).</span><span class="n">convert</span><span class="p">(</span><span class="s">'L'</span><span class="p">)</span>
+<span class="n">lena_img</span>
+</pre></table></code></div></div><p><img data-src="https://i.imgur.com/Bso2y74.png" alt="" data-proofer-ignore></p><p>The method assumes all input image values lie in $[-1, 1]$</p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="c1"># Normalize the image so the values of its pixels lie between [-1, 1]
+</span><span class="n">lena</span> <span class="o">=</span> <span class="p">(</span><span class="n">lena</span><span class="p">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+</pre></table></code></div></div><p>Now we can create arrays with our fixed $\beta_t$ coefficients (and its $\alpha$ and $\bar\alpha_t$ derivations).</p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre><span class="n">betas</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>  <span class="c1"># linear increase schedule
+</span><span class="n">alphas</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">betas</span>
+<span class="n">alphas_bars</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">cumprod</span><span class="p">(</span><span class="n">alphas</span><span class="p">)</span>
+
+<span class="c1"># Also keep tensor copies
+</span><span class="n">betas_tf</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">betas</span><span class="p">)</span>
+<span class="n">alphas_tf</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">alphas</span><span class="p">)</span>
+<span class="n">alphas_bars_tf</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">alphas_bars</span><span class="p">)</span>
+</pre></table></code></div></div><p>Let’s create the diffusion process, $q$.</p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+</pre><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">q</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">return_noise</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="s">""" Gets a noised version of x0 sampling from q at time t
+
+    Parameters
+    ----------
+        x0 : np.ndarray
+            Initial image
+        t : int
+            timestep
+        return_noise : bool
+            Whether to also return the epsilon noise added
+    
+    Returns
+    ----------
+        Noised version of x0 at timestep t
+    """</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x0</span>
+
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">alpha_bar</span><span class="p">),</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">*</span> <span class="n">x0</span><span class="p">,</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">alpha_bar</span><span class="p">),</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span>
+        <span class="n">shape</span><span class="o">=</span><span class="n">x0</span><span class="p">.</span><span class="n">shape</span>
+    <span class="p">)</span>
+
+    <span class="n">noised</span> <span class="o">=</span>  <span class="n">mean</span> <span class="o">+</span> <span class="n">tf</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="o">*</span> <span class="n">eps</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_noise</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">noised</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">noised</span><span class="p">,</span> <span class="n">eps</span>
+
+</pre></table></code></div></div><p>The following image depicts an example of sampling from $q$ at several different timesteps:</p><p><img data-src="https://i.imgur.com/nNM8Hqb.png" alt="" data-proofer-ignore> <em>Diffusion process example.</em></p><p>Actually build the net</p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="n">net</span> <span class="o">=</span> <span class="n">build_unet_model</span><span class="p">()</span>
+<span class="n">net</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s">'adam'</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s">'mse'</span><span class="p">)</span>
+</pre></table></code></div></div><p>Define the dataloader, which will sample a random $x_t$ image and return <code class="language-plaintext highlighter-rouge">(X, y)</code> tuples with $(x_{t+1}, \epsilon)$.</p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre><td class="rouge-code"><pre><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">)</span>
+<span class="n">x_0</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">q</span><span class="p">(</span><span class="n">lena</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">tf</span><span class="p">.</span><span class="n">float64</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">data_generator</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1024</span><span class="p">):</span>
+        <span class="c1"># Get a random timestep
+</span>        <span class="n">t</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(),</span> <span class="n">minval</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">betas</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">int32</span><span class="p">)</span>
+
+        <span class="c1"># Sample x_{t+1} and also get the noise epsilon that was added to it
+</span>        <span class="n">q_1</span><span class="p">,</span> <span class="n">noise</span> <span class="o">=</span> <span class="n">q</span><span class="p">(</span><span class="n">lena</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">return_noise</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="c1"># Ensure all shapes are correct
+</span>        <span class="n">q_1</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">q_1</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="n">q_1</span><span class="p">,</span> <span class="n">noise</span>
+
+<span class="c1"># Build dataset from the above generator
+</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">Dataset</span><span class="p">.</span><span class="n">from_generator</span><span class="p">(</span>
+    <span class="n">data_generator</span><span class="p">,</span>
+    <span class="n">output_signature</span> <span class="o">=</span> <span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">TensorSpec</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">),</span> 
+                        <span class="n">tf</span><span class="p">.</span><span class="n">TensorSpec</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">))</span>
+<span class="p">).</span><span class="n">batch</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">).</span><span class="n">prefetch</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> 
+</pre></table></code></div></div><p>Now, we’re able to train the model.</p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="n">hist</span> <span class="o">=</span> <span class="n">net</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+</pre></table></code></div></div><p>Now we need to implement an inference function which accepts random noise (or any image) and let the process use our model for running the reverse diffusion part.</p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+</pre><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">inference</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">betas</span><span class="p">)):</span>
+    <span class="c1"># Save steps for plotting them later 
+</span>    <span class="n">iterations</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">steps</span> <span class="o">-</span> <span class="n">s</span>
+
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">betas</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">alphas</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+        <span class="n">alpha_bar</span> <span class="o">=</span> <span class="n">alphas_bars</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>      
+
+        <span class="c1"># Predict added noise using our trained model
+</span>        <span class="n">eps</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(</span>
+            <span class="n">net</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">iterations</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Get x_{t-1} (algorithm 2)        
+</span>        <span class="n">mu</span> <span class="o">=</span>  <span class="n">tf</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(</span>
+            <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">alpha</span><span class="p">)</span>  <span class="o">*</span> <span class="p">(</span> <span class="n">iterations</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="o">-</span> <span class="p">(</span><span class="n">beta</span> <span class="o">/</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha_bar</span><span class="p">))</span> <span class="o">*</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">z</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">mu</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span>  
+
+        <span class="n">new_img</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">+</span> <span class="p">(</span><span class="n">z</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">beta</span><span class="p">))</span>
+
+        <span class="n">iterations</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_img</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">iterations</span>
+</pre></table></code></div></div><p>Okay, with all implemented, let’s start from a very noisy image and see whether it denoises it right</p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="n">from_step</span> <span class="o">=</span> <span class="mi">180</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="p">(</span><span class="n">lena</span><span class="p">,</span> <span class="n">from_step</span><span class="p">).</span><span class="n">numpy</span><span class="p">().</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'Greys'</span><span class="p">,</span>  <span class="n">interpolation</span><span class="o">=</span><span class="s">'nearest'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+</pre></table></code></div></div><p><img data-src="https://i.imgur.com/SNdq6AF.png" alt="" data-proofer-ignore></p><p>Run inference</p><div class="language-python highlighter-rouge"><div class="code-header"><span> </span><button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="n">results</span> <span class="o">=</span> <span class="n">inference</span><span class="p">(</span>
+    <span class="n">q</span><span class="p">(</span><span class="n">lena</span><span class="p">,</span> <span class="n">from_step</span><span class="p">).</span><span class="n">numpy</span><span class="p">(),</span> 
+    <span class="n">steps</span><span class="o">=</span><span class="n">from_step</span>
+<span class="p">)</span>
+</pre></table></code></div></div><p>Next figure shows an animation (concatenated images in <code class="language-plaintext highlighter-rouge">results</code>) of the inference process:</p><p><img data-src="https://i.imgur.com/ryEqNrY.gif" alt="" data-proofer-ignore></p><h2 id="improvements-and-further-research"><span class="mr-2">Improvements and further research</span><a href="#improvements-and-further-research" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>Since the publication of the paper several steps forward have been made.</p><p>One drawback of the method explained above is the way inference process works, as sampling one step at a time is clearly a bottleneck. With the intention of mitigating issue this, works like <a href="https://arxiv.org/pdf/2010.02502.pdf">Song et al. 2021, Denoising Diffusion Implicit Models</a> propose tricks aimed at improving inference speed.</p><p>Another interesting improvement is having more control on the generation process. For example, we could be only interested in generating dog pictures. An quite cool contribution on this is <a href="https://arxiv.org/abs/2112.10741">GLIDE</a>, where a transformer is used for encoding a query text (e.g. “a dog”) and then combining that text representation with the internal U-Net activations. This way the image generation process becomes conditioned on what the user specifies via text, gaining more control.</p><h2 id="interesting-resources"><span class="mr-2">Interesting resources</span><a href="#interesting-resources" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>Here I link several extra resources I found very useful when learning about diffusion models (just in case you want to go down the rabbit hole).</p><p>[1] <a href="https://www.youtube.com/watch?v=fbLgFrlTnGU">What are diffusion models?</a></p><p>[2] <a href="https://arxiv.org/pdf/2006.11239.pdf">Ho et al (2020). “Denoising Diffusion Probabilistic Models”</a>. The original paper.</p><p>[3] <a href="https://cdn.openai.com/papers/dall-e-2.pdf">Ramesh et al (2022)</a>. DALL-E 2 paper.</p><p>[4] <a href="https://www.youtube.com/watch?v=xqDeAz0U-R4">Imagen, the DALL-E 2 competitor from Google Brain, explained</a></p><p><em>Hope you’ve learned something new today!</em></p></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='//categories/ml/'>ML</a>, <a href='//categories/deep-learning/'>Deep Learning</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="//tags/maths/" class="post-tag no-text-decoration" >maths</a> <a href="//tags/programming/" class="post-tag no-text-decoration" >programming</a> <a href="//tags/python/" class="post-tag no-text-decoration" >python</a> <a href="//tags/image/" class="post-tag no-text-decoration" >image</a> <a href="//tags/cv/" class="post-tag no-text-decoration" >cv</a> <a href="//tags/vision/" class="post-tag no-text-decoration" >vision</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=Intro+to+Diffusion+Models+-+Alvaro%27s+blog&url=https%3A%2F%2Fairlegend.github.io%2Fposts%2Fdiffusion-models%2F" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=Intro+to+Diffusion+Models+-+Alvaro%27s+blog&u=https%3A%2F%2Fairlegend.github.io%2Fposts%2Fdiffusion-models%2F" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https%3A%2F%2Fairlegend.github.io%2Fposts%2Fdiffusion-models%2F&text=Intro+to+Diffusion+Models+-+Alvaro%27s+blog" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access"><div id="access-lastmod" class="post"><div class="panel-heading">Recently Updated</div><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/dreambooth/">How I generated professional headshots for my LinkedIn profile</a><li><a href="/posts/openchords/">The AI Coder: Building a website using AI</a><li><a href="/posts/lcm/">Latent Consistency Models: How to speedup image generation</a><li><a href="/posts/ai-development/">Some thoughts on the usage of AI for developing software: Is the end near?</a><li><a href="/posts/forward-mode-autodiferentiation/">The magic behind (forward mode) Automatic Differentiation</a></ul></div></div><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5"><div class="panel-heading pl-3 pt-2 mb-2">Contents</div><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/forward-mode-autodiferentiation/"><div class="card-body"> <em class="timeago small" data-ts="1647574380" > 2022-03-18 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>The magic behind (forward mode) Automatic Differentiation</h3><div class="text-muted small"><p> Demystifying Automatic Differentiation If you recall from highschool you’ll probably remember the definition of a derivative: [\begin{equation} f’(x) = \lim_{\epsilon \rightarrow 0} \frac{f(...</p></div></div></a></div><div class="card"> <a href="/posts/lora/"><div class="card-body"> <em class="timeago small" data-ts="1698636780" > 2023-10-30 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>LoRA: How can I tune my model without an expensive GPU?</h3><div class="text-muted small"><p> Training neural networks can be really tedious. Both in terms of methodological complexity – tuning hyperparameters, syncing training runs, scheduling learning rates, etc. – and also hardware requi...</p></div></div></a></div><div class="card"> <a href="/posts/dreambooth/"><div class="card-body"> <em class="timeago small" data-ts="1700274780" > 2023-11-18 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>How I generated professional headshots for my LinkedIn profile</h3><div class="text-muted small"><p> The other day I was bored, wandering through LinkedIn and realized that I probably needed some new profile pics. You know, the ones very corporate-guys share on their posts. Something cool with a s...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="//posts/forward-mode-autodiferentiation/" class="btn btn-outline-primary" prompt="Older"><p>The magic behind (forward mode) Automatic Differentiation</p></a> <a href="//posts/lora/" class="btn btn-outline-primary" prompt="Newer"><p>LoRA: How can I tune my model without an expensive GPU?</p></a></div></div></div></div><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted"><div class="footer-left"><p class="mb-0"> © 2023 <a href="https://twitter.com/aalvaroir">Alvaro</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><div id="access-tags"><div class="panel-heading">Trending Tags</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/programming/">programming</a> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/maths/">maths</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/ai/">ai</a> <a class="post-tag" href="/tags/coding/">coding</a> <a class="post-tag" href="/tags/gpt/">gpt</a> <a class="post-tag" href="/tags/cv/">cv</a> <a class="post-tag" href="/tags/image/">image</a> <a class="post-tag" href="/tags/vision/">vision</a></div></div></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script> /* see: <https://docs.mathjax.org/en/latest/options/input/tex.html#tex-options> */ MathJax = { tex: { inlineMath: [ /* start/end delimiter pairs for in-line math */ ['$','$'], ['\\(','\\)'] ], displayMath: [ /* start/end delimiter pairs for display math */ ['$$', '$$'], ['\\[', '\\]'], ], tags: 'ams' } }; // MathJax = { // tex: { // inlineMath: [ /* start/end delimiter pairs for in-line math */ // ['$','$'], // ['\\(','\\)'] // ], // displayMath: [ /* start/end delimiter pairs for display math */ // ['$$', '$$'], // ['\\[', '\\]'] // ] // }, // chtml: { // scale: 1.2, // global scaling factor for all expressions // }, // svg: { // minScale: .7, // }, // options: { // enableMenu: true, // set to false to disable the menu // menuOptions: { // settings: { // zoom: 'DoubleClick', // zscale: '300%', // zoom scaling factor // texHints: true, // collapsible: false, // true if complex math should be collapsible // explorer: false, // true if the expression explorere should be active // } // } // } // }; </script> <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>
